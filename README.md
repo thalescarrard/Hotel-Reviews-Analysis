@@ -64,10 +64,7 @@ All review dates are converted to consistent datetime format and filtered to inc
 - `expediaScraper.py` – Expedia scraper
 - `dataCleaner.py` – Data merging and cleaning
 - `dataAnalyzer.py` – Visual and statistical analysis
-- `expedia_reviews_Boulan.csv` – Expedia raw dataset
-- `booking_reviews_Boulan.csv` – Booking raw dataset
-- `cleaned_reviews.csv` – Clean, unified dataset
-
+  
 ---
 
 ## 🛠️ Requirements
