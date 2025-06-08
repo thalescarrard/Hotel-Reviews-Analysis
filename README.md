@@ -76,7 +76,8 @@ All review dates are converted to consistent datetime format and filtered to inc
 
 ---
 
-## ⚠️ Disclaimer
+### ⚠️ Disclaimer
+
 This project is intended for educational and personal research purposes only. The data collected from websites such as Booking.com and Expedia.com was obtained via automated browser interaction (e.g., Selenium) and is not intended for commercial use, redistribution, or publication.
 
 Please note:
