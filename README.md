@@ -43,6 +43,7 @@ This project scrapes hotel review data from [Booking.com](https://www.booking.co
 ---
 
 📊 Sample Visualizations
+
 (To be added...)
 
 ---
