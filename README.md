@@ -42,7 +42,7 @@ This project scrapes hotel review data from [Booking.com](https://www.booking.co
 
 ---
 
-📊 Sample Visualizations
+## 📊 Sample Visualizations
 
 (To be added...)
 
@@ -64,6 +64,8 @@ All review dates are converted to consistent datetime format and filtered to inc
 - `expediaScraper.py` – Expedia scraper
 - `dataCleaner.py` – Data merging and cleaning
 - `dataAnalyzer.py` – Visual and statistical analysis
+- `cleaned_reviews.csv` – Clean, unified dataset
+
   
 ---
 
