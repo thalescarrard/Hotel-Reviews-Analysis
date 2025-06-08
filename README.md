@@ -7,7 +7,7 @@ This project scrapes hotel review data from [Booking.com](https://www.booking.co
 ## 🚀 Project Structure
 
 ### 1. **Data Collection (Selenium + BeautifulSoup)**
-- Scrapes reviews using `undetected-chromedriver` to bypass anti-bot detection.
+- Scrapes reviews from both websites.
 - Extracts fields like:
   - Review text (positive + negative)
   - Rating
