@@ -71,5 +71,20 @@ All review dates are converted to consistent datetime format and filtered to inc
 
 ## 🛠️ Requirements
 
-```bash
-pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver
+`bash`
+`pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver`
+
+---
+
+## ⚠️ Disclaimer
+This project is intended for educational and personal research purposes only. The data collected from websites such as Booking.com and Expedia.com was obtained via automated browser interaction (e.g., Selenium) and is not intended for commercial use, redistribution, or publication.
+
+Please note:
+
+All trademarks and content belong to their respective owners (e.g., Booking Holdings, Expedia Group).
+
+This repository does not claim ownership of any data sourced from these platforms.
+
+The use of scraping tools may violate the terms of service of some websites. By using or replicating this code, you agree to do so at your own risk and assume all responsibility for compliance with applicable laws and website policies.
+
+If you're affiliated with any of the mentioned platforms and have concerns, feel free to open an issue or request removal.
