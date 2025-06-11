@@ -78,7 +78,7 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 ## 🛠️ Requirements
 
 ```bash
-pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver plotly streamlit textblob
+pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver plotly textblob
 ```
 
 ### ⚠️ Disclaimer
