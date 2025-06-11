@@ -4,78 +4,82 @@ from dateutil import parser
 # --- Load CSV files ---
 df_booking = pd.read_csv("booking_reviews_Boulan.csv")
 df_expedia = pd.read_csv("expedia_reviews_Boulan.csv")
+df_tripadvisor = pd.read_csv("tripadvisor_reviews_Boulan.csv")
 
 # --- Standardize column names ---
-df_booking.columns = df_booking.columns.str.strip().str.lower()
-df_expedia.columns = df_expedia.columns.str.strip().str.lower()
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df.columns = df.columns.str.strip().str.lower()
 
-# Apply robust parsing using dateutil for both datasets
-df_booking["review_date"] = df_booking["review_date"].apply(
-    lambda x: parser.parse(x) if pd.notna(x) else pd.NaT
-)
-
-df_expedia["review_date"] = df_expedia["review_date"].apply(
-    lambda x: parser.parse(x) if pd.notna(x) else pd.NaT
-)
+# --- Add source column ---
+df_booking["source"] = "booking"
+df_expedia["source"] = "expedia"
+df_tripadvisor["source"] = "tripadvisor"
 
 # --- Rename for consistency ---
-df_booking.rename(columns={"traveler_name": "name", "review_text": "text"}, inplace=True)
-df_expedia.rename(columns={"traveler_name": "name", "review_text": "text"}, inplace=True)
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df.rename(columns={"traveler_name": "name", "review_text": "text"}, inplace=True)
 
-# --- Convert datatypes ---
-df_booking["review_rating"] = pd.to_numeric(df_booking["review_rating"], errors="coerce")
-df_expedia["review_rating"] = pd.to_numeric(df_expedia["review_rating"], errors="coerce")
+# --- Robust date parsing ---
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df["review_date"] = df["review_date"].apply(lambda x: parser.parse(x) if pd.notna(x) else pd.NaT)
+    df["review_date"] = pd.to_datetime(df["review_date"], errors="coerce")
 
-df_booking["review_date"] = pd.to_datetime(df_booking["review_date"], errors="coerce")
-df_expedia["review_date"] = pd.to_datetime(df_expedia["review_date"], errors="coerce")
-
-df_booking["length_of_stay"] = pd.to_numeric(df_booking["length_of_stay"], errors="coerce")
-df_expedia["length_of_stay"] = pd.to_numeric(df_expedia["length_of_stay"], errors="coerce")
+# --- Convert numeric fields ---
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df["review_rating"] = pd.to_numeric(df["review_rating"], errors="coerce")
+    df["length_of_stay"] = pd.to_numeric(df.get("length_of_stay"), errors="coerce")
 
 # --- Clean text ---
-df_booking["text"] = df_booking["text"].astype(str).str.strip()
-df_expedia["text"] = df_expedia["text"].astype(str).str.strip()
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df["text"] = df["text"].astype(str).str.strip()
 
-# --- Drop exact duplicates within source ---
-booking_before = len(df_booking)
-df_booking.drop_duplicates(subset=["text", "review_date", "review_rating"], inplace=True)
-booking_dupes_removed = booking_before - len(df_booking)
+# --- Drop exact duplicates within each source ---
+def deduplicate(df, label):
+    before = len(df)
+    df.drop_duplicates(subset=["text", "review_date", "review_rating"], inplace=True)
+    removed = before - len(df)
+    print(f"Duplicates removed in {label}: {removed}")
+    return df
 
-expedia_before = len(df_expedia)
-df_expedia.drop_duplicates(subset=["text", "review_date", "review_rating"], inplace=True)
-expedia_dupes_removed = expedia_before - len(df_expedia)
+df_booking = deduplicate(df_booking, "Booking")
+df_expedia = deduplicate(df_expedia, "Expedia")
+df_tripadvisor = deduplicate(df_tripadvisor, "TripAdvisor")
 
-# --- Drop entries missing ratings ---
-df_booking.dropna(subset=["review_rating"], inplace=True)
-df_expedia.dropna(subset=["review_rating"], inplace=True)
+# --- Drop rows with missing ratings ---
+for df in [df_booking, df_expedia, df_tripadvisor]:
+    df.dropna(subset=["review_rating"], inplace=True)
 
 # --- Combine datasets ---
-df_all = pd.concat([df_booking, df_expedia], ignore_index=True)
-df_all['review_date'] = pd.to_datetime(df_all['review_date'], errors='coerce')
+df_all = pd.concat([df_booking, df_expedia, df_tripadvisor], ignore_index=True)
 
-# --- Prioritize Booking if duplicate appears in both ---
+# --- Final deduplication: prioritize Booking > Expedia > TripAdvisor ---
 combined_before = len(df_all)
-df_all = df_all.sort_values(by="source", ascending=False)
-df_all = df_all.drop_duplicates(subset=["text", "name", "review_date"])
+source_priority = {"booking": 3, "expedia": 2, "tripadvisor": 1}
+df_all["source_rank"] = df_all["source"].map(source_priority)
+df_all = df_all.sort_values(by="source_rank", ascending=False)
+df_all.drop_duplicates(subset=["text", "name", "review_date"], inplace=True)
 combined_dupes_removed = combined_before - len(df_all)
+df_all.drop(columns=["source_rank"], inplace=True)
 
-# Filter to keep only reviews with dates in 2020 or later
-df = df_all[df_all['review_date'] >= pd.to_datetime('2020-01-01')]
+# --- Filter reviews: 2014 onward ---
+df_all = df_all[df_all["review_date"] >= pd.to_datetime("2014-01-01")]
 
-# --- Save cleaned output ---
+# --- Normalize traveler_type labels ---
+df_all["traveler_type"] = df_all["traveler_type"].replace({
+    "Solo traveler": "Solo",
+    "Couples": "Couple"
+})
+
+# Drop review_title and date_visited columns
+df_all.drop(columns=["review_title", "date_visited"], inplace=True)
+
+
+# --- Save to CSV ---
 df_all.to_csv("cleaned_reviews.csv", index=False)
 
-# --- Summary printout ---
-print("Cleaning complete.")
-print(f"Booking reviews loaded: {booking_before}")
-print(f"Expedia reviews loaded: {expedia_before}")
-print(f"Duplicates removed in Booking: {booking_dupes_removed}")
-print(f"Duplicates removed in Expedia: {expedia_dupes_removed}")
-print(f"Total combined reviews before final deduplication: {combined_before}")
-print(f"Final duplicates removed across both sources: {combined_dupes_removed}")
-print(f"Dropped reviews before 2020, final cleaned review count: {len(df_all)}")
-
-# --- Quick Overview ---
+# --- Summary ---
+print("\nCleaning complete.")
+print(f"Final cleaned review count (2020+): {len(df_all)}")
 print("\nDataset shape:", df_all.shape)
 print("Columns:", df_all.columns.tolist())
 print("\nMissing values per column:\n", df_all.isna().sum())

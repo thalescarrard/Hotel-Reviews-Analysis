@@ -142,7 +142,6 @@ for review in reviews:
         length_of_stay = None
 
     review_list.append({
-        'source': 'Expedia.com',
         'review_text': review_text,
         'review_rating': rating,
         'traveler_name': name,

@@ -142,7 +142,6 @@ while current_page < max_pages:
             traveler_type = None
 
         review_list.append({
-            'source': 'Booking.com',
             'review_text': review_text,
             'review_rating': rating,
             'traveler_name': name,
