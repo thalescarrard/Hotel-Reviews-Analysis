@@ -1,91 +1,86 @@
 # Hotel Review Scraper and Analyzer 🏨📊
 
-This project scrapes hotel review data from [Booking.com](https://www.booking.com) and [Expedia](https://www.expedia.com), cleans and merges the data, and analyzes it using Python libraries like pandas, matplotlib, and seaborn. The goal is to explore patterns in guest sentiment and ratings, and later apply machine learning models for deeper insights.
+This project scrapes hotel review data from **Booking.com**, **Expedia**, and **TripAdvisor**, cleans and merges the data, and analyzes it using Python libraries like pandas, matplotlib, seaborn, and more. It aims to explore patterns in guest sentiment and ratings, including running sentiment analysis on review texts, and provides a foundation for advanced forecasting and dashboarding.
 
 ---
 
 ## 🚀 Project Structure
 
 ### 1. **Data Collection (Selenium + BeautifulSoup)**
-- Scrapes reviews from both websites.
+- Scrapes reviews from three platforms:
+  - Booking.com
+  - Expedia
+  - TripAdvisor
 - Extracts fields like:
   - Review text (positive + negative)
   - Rating
   - Traveler name
   - Date of review
   - Length of stay
-  - Traveler type (Booking.com only)
+  - Traveler type (where available)
 - Handles pagination and review modals.
 - Saves results as `.csv` files per platform.
 
 ### 2. **Data Cleaning**
-- Merges Booking and Expedia datasets.
-- Normalizes column names and types:
+- Merges Booking, Expedia, and TripAdvisor datasets.
+- Normalizes column names and data types:
   - Converts dates to `datetime`
-  - Converts ratings to `float`
+  - Converts ratings to numeric types
   - Removes duplicates (based on text + name + date)
-  - Removes extremely old or empty reviews
-- Saves a single, clean dataset for analysis.
+  - Filters out very old or empty reviews
+- Standardizes traveler types (e.g., “solo traveler” → “solo”).
+- Saves a unified, clean dataset for analysis.
 
 ### 3. **Data Analysis & Visualization**
-- Exploratory Data Analysis (EDA) using:
-  - Histogram of rating distribution
-  - Review counts per platform
-  - Boxplots comparing rating distributions
-  - Ratings over time (monthly trends)
-- Focuses on reviews from 2020 onward for consistency.
+- Exploratory Data Analysis (EDA) including:
+  - Rating distribution histograms
+  - Review counts per platform and traveler type
+  - Average ratings over time (yearly/monthly trends)
+  - Boxplots and bar charts
+- Sentiment analysis applied to review texts to gauge guest feelings.
 
 ### 4. **Future Plans**
-- Sentiment analysis on review text.
-- Rating prediction models based on review content.
-- Dashboards or reports for hotel operators.
+- Develop interactive dashboards (e.g., Power BI, Streamlit) for hotel operators.
+- Apply AI and machine learning models for:
+  - Rating forecasting and trends prediction
+  - Sentiment-driven insights and alerting
+  - Deeper customer segmentation
+- Explore natural language processing (NLP) for detailed sentiment and topic modeling.
 
 ---
 
 ## 📊 Sample Visualizations
 
-(To be added...)
+(To be added, including sentiment score trends and interactive dashboard screenshots.)
 
 ---
 
 ## 📌 Notes
 
-Traveler Type is only available from Booking.com due to better structured HTML.
-
-Duplicate reviews posted on both platforms are removed using exact matches on review_text, traveler_name, and review_date.
-
-All review dates are converted to consistent datetime format and filtered to include only 2020 and later.
+- Traveler Type is available from Booking.com and partially from other platforms, standardized during cleaning.
+- Duplicate reviews across platforms are identified and removed.
+- All review dates are normalized and filtered for recent years (2014+ or 2020+ as needed).
+- Sentiment analysis uses basic NLP techniques to classify review tone (positive, negative, neutral).
 
 ---
 
 ## 📁 Files
 
-- `bookingScraper.py` – Booking.com scraper
-- `expediaScraper.py` – Expedia scraper
-- `dataCleaner.py` – Data merging and cleaning
-- `dataAnalyzer.py` – Visual and statistical analysis
-- `cleaned_reviews.csv` – Clean, unified dataset
+- `bookingScraper.py` – Booking.com scraper  
+- `expediaScraper.py` – Expedia scraper  
+- `tripAdvisorScraper.py` – TripAdvisor scraper  
+- `dataCleaner.py` – Data merging and cleaning  
+- `dataAnalyzer.py` – Visual and statistical analysis, including sentiment analysis  
+- `cleaned_reviews.csv` – Clean, unified dataset  
 
-  
 ---
 
 ## 🛠️ Requirements
 
-`bash`
-`pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver`
-
----
+```bash
+pip install pandas matplotlib seaborn beautifulsoup4 selenium undetected-chromedriver plotly streamlit textblob
+```
 
 ### ⚠️ Disclaimer
 
-This project is intended for educational and personal research purposes only. The data collected from websites such as Booking.com and Expedia.com was obtained via automated browser interaction (e.g., Selenium) and is not intended for commercial use, redistribution, or publication.
-
-Please note:
-
-All trademarks and content belong to their respective owners (e.g., Booking Holdings, Expedia Group).
-
-This repository does not claim ownership of any data sourced from these platforms.
-
-The use of scraping tools may violate the terms of service of some websites. By using or replicating this code, you agree to do so at your own risk and assume all responsibility for compliance with applicable laws and website policies.
-
-If you're affiliated with any of the mentioned platforms and have concerns, feel free to open an issue or request removal.
+This project is for educational and personal research only. Data from Booking.com, Expedia, and TripAdvisor is collected via automated scraping tools and is not for commercial use. Respect all platform terms of service and data privacy rules.
