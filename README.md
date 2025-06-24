@@ -17,7 +17,7 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
   - Traveler name
   - Date of review
   - Length of stay
-  - Traveler type (where available)
+  - Traveler type 
 - Handles pagination and review modals.
 - Saves results as `.csv` files per platform.
 
@@ -51,7 +51,7 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 
 ## 📊 Sample Visualizations
 
-(To be added, including sentiment score trends and interactive dashboard screenshots.)
+![Dashboard Preview](PlatformAnalysisSS.png)
 
 ---
 
@@ -70,9 +70,9 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 - `expediaScraper.py` – Expedia scraper  
 - `tripAdvisorScraper.py` – TripAdvisor scraper  
 - `dataCleaner.py` – Data merging and cleaning  
-- `dataAnalyzer.py` – Visual and statistical analysis, including sentiment analysis  
-- `cleaned_reviews.csv` – Clean, unified dataset  
-
+- `dataAnalyzer.py` – Visual and statistical analysis
+- `customerInsights.py` - Sentiment analysis
+- `Reviews_Report.pbix` - PowerBI report (in progress)
 ---
 
 ## 🛠️ Requirements
