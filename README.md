@@ -73,6 +73,7 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 - `dataAnalyzer.py` – Visual and statistical analysis
 - `customerInsights.py` - Sentiment analysis
 - `Reviews_Report.pbix` - PowerBI report (in progress)
+  
 ---
 
 ## 🛠️ Requirements
