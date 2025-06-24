@@ -1,6 +1,20 @@
 import pandas as pd
 from dateutil import parser
 
+# Function to extract keyword
+def simplify_traveler_type(text):
+    if pd.isna(text):
+        return None
+    text = text.lower()
+    if "partner" in text:
+        return "Couple"
+    elif "family" in text:
+        return "Family"
+    elif "group" in text:
+        return "Group"
+    else:
+        return "Solo"
+
 # --- Load CSV files ---
 df_booking = pd.read_csv("booking_reviews_Boulan.csv")
 df_expedia = pd.read_csv("expedia_reviews_Boulan.csv")
@@ -14,6 +28,17 @@ for df in [df_booking, df_expedia, df_tripadvisor]:
 df_booking["source"] = "booking"
 df_expedia["source"] = "expedia"
 df_tripadvisor["source"] = "tripadvisor"
+
+# Format total reviews field
+for df in [df_booking]:
+    df['total_reviews'] = df['total_reviews'].str.replace(' reviews', '').astype(int)
+
+for df in [df_expedia]:
+    df['total_reviews'] = df['total_reviews'].str.replace(',', '').str.replace(' verified reviews', '').astype(int)
+
+# Strip text for traveler_type for Expedia
+for df in [df_expedia]:
+    df['traveler_type'] = df['traveler_type'].apply(simplify_traveler_type)
 
 # --- Rename for consistency ---
 for df in [df_booking, df_expedia, df_tripadvisor]:
@@ -70,6 +95,12 @@ df_all["traveler_type"] = df_all["traveler_type"].replace({
     "Couples": "Couple"
 })
 
+# Fill empty values for Traveler Type
+df_all.fillna({'traveler_type': 'Unknown'}, inplace=True)
+
+# Fill empty values for Lenght of Stay
+df_all.fillna({'length_of_stay': '0'}, inplace=True)
+
 # Drop review_title and date_visited columns
 df_all.drop(columns=["review_title", "date_visited"], inplace=True)
 
@@ -79,7 +110,7 @@ df_all.to_csv("cleaned_reviews.csv", index=False)
 
 # --- Summary ---
 print("\nCleaning complete.")
-print(f"Final cleaned review count (2020+): {len(df_all)}")
+print(f"Final cleaned review count (2014+): {len(df_all)}")
 print("\nDataset shape:", df_all.shape)
 print("Columns:", df_all.columns.tolist())
 print("\nMissing values per column:\n", df_all.isna().sum())

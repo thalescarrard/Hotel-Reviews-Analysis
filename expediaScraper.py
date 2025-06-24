@@ -29,7 +29,7 @@ if os.path.exists(profile_path):
     shutil.rmtree(profile_path)
 options.add_argument(f"--user-data-dir={profile_path}")
 
-driver = uc.Chrome(service=Service(), options=options)
+driver = uc.Chrome(version_main=137, service=Service(), options=options)
 
 url = "https://www.expedia.com/Miami-Hotels-Boulan-South-Beach.h4599935.Hotel-Information?locale=en_US&siteid=1&pwaDialog=product-reviews"
 driver.get(url)
@@ -103,7 +103,8 @@ soup = BeautifulSoup(driver.page_source, "html.parser")
 # --- Extract total rating and review count ---
 try:
     total_rating_elem = soup.select_one("div.uitk-text.uitk-type-500.uitk-type-bold.uitk-text-default-theme")
-    total_rating = total_rating_elem.text.strip() if total_rating_elem else None
+    total_rating_raw = total_rating_elem.text.strip() if total_rating_elem else None
+    total_rating = float(total_rating_raw.split('/')[0])
 
     total_reviews_elem = soup.select_one("button.uitk-more-info-trigger > span")
     total_reviews = total_reviews_elem.text.strip() if total_reviews_elem else None
@@ -133,6 +134,10 @@ for review in reviews:
         date = review.select_one("span[itemprop='datePublished']").text.strip()
     except:
         date = None
+    try: 
+        traveler_type = review.select_one("div.uitk-text.uitk-type-300.uitk-text-standard-theme").text.strip()
+    except:
+        traveler_type = None
     try:
         stay_text = review.select_one("div.uitk-text.uitk-type-200.uitk-text-standard-theme.uitk-layout-flex-item").text.strip()
         import re
@@ -146,7 +151,8 @@ for review in reviews:
         'review_rating': rating,
         'traveler_name': name,
         'review_date': date,
-        'length_of_stay': length_of_stay
+        'length_of_stay': length_of_stay,
+        'traveler_type': traveler_type
     })
 
 # --- Save to CSV ---
