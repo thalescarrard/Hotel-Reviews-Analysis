@@ -25,9 +25,9 @@ for df in [df_booking, df_expedia, df_tripadvisor]:
     df.columns = df.columns.str.strip().str.lower()
 
 # --- Add source column ---
-df_booking["source"] = "booking"
-df_expedia["source"] = "expedia"
-df_tripadvisor["source"] = "tripadvisor"
+df_booking["source"] = "Booking"
+df_expedia["source"] = "Expedia"
+df_tripadvisor["source"] = "Tripadvisor"
 
 # Format total reviews field
 for df in [df_booking]:
