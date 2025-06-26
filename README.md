@@ -57,7 +57,6 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 
 ## 📌 Notes
 
-- Traveler Type is available from Booking.com and partially from other platforms, standardized during cleaning.
 - Duplicate reviews across platforms are identified and removed.
 - All review dates are normalized and filtered for recent years (2014+ or 2020+ as needed).
 - Sentiment analysis uses basic NLP techniques to classify review tone (positive, negative, neutral).
