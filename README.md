@@ -53,6 +53,9 @@ This project scrapes hotel review data from **Booking.com**, **Expedia**, and **
 
 ![Dashboard Preview](PlatformAnalysisSS.png)
 
+![Dashboard Preview](RatingsAnalysisSS.png)
+
+
 ---
 
 ## 📌 Notes
